@@ -60,4 +60,17 @@ public class InvoiceServiceTest {
             Assert.assertEquals(InvoiceSummaryException.ExceptionType.NO_RIDES, e.type);
         }
     }
+
+    @Test
+    public void givenUserId_shouldReturnInvoiceSummary() {
+        String userId = "prerna4498";
+        invoiceGenerator.getRideDetails().addUsersRides(userId, rides);
+        try {
+            InvoiceSummary invoiceSummary = invoiceGenerator.generateInvoiceSummary(userId);
+            Assert.assertEquals(2, invoiceSummary.getTotalRides());
+            Assert.assertEquals(30, invoiceSummary.getTotalFare(), 0.0);
+            Assert.assertEquals(15, invoiceSummary.getAverageFarePerRide(), 0.0);
+        } catch (InvoiceSummaryException e) {
+        }
+    }
 }
