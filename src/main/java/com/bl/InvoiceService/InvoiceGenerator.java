@@ -23,4 +23,10 @@ public class InvoiceGenerator {
         double totalFare = Arrays.stream(rides).mapToDouble(ride -> calculateFare(ride.getDistance(), ride.getTime())).sum();
         return totalFare;
     }
+
+    public InvoiceSummary generateInvoiceSummary(Ride[] rides) {
+        int totalRides = rides.length;
+        double totalFare = calculateFare(rides);
+        return new InvoiceSummary(totalRides,totalFare);
+    }
 }
