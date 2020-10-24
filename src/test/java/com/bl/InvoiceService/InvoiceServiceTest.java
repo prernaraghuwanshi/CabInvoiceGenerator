@@ -41,9 +41,22 @@ public class InvoiceServiceTest {
 
     @Test
     public void givenMultipleRides_shouldReturnInvoiceSummary() {
-        InvoiceSummary invoiceSummary = invoiceGenerator.generateInvoiceSummary(rides);
-        Assert.assertEquals(2,invoiceSummary.getTotalRides());
-        Assert.assertEquals(30,invoiceSummary.getTotalFare(),0.0);
-        Assert.assertEquals(15,invoiceSummary.getAverageFarePerRide(),0.0);
+        try {
+            InvoiceSummary invoiceSummary = invoiceGenerator.generateInvoiceSummary(rides);
+            Assert.assertEquals(2, invoiceSummary.getTotalRides());
+            Assert.assertEquals(30, invoiceSummary.getTotalFare(), 0.0);
+            Assert.assertEquals(15, invoiceSummary.getAverageFarePerRide(), 0.0);
+        } catch (InvoiceSummaryException e) {
+        }
+    }
+
+    @Test
+    public void givenNoRides_shouldThrowInvoiceSummaryException() {
+        Ride[] noRides = {};
+        try {
+            InvoiceSummary invoiceSummary = invoiceGenerator.generateInvoiceSummary(noRides);
+        } catch (InvoiceSummaryException e) {
+            Assert.assertEquals(InvoiceSummaryException.ExceptionType.NO_RIDES, e.type);
+        }
     }
 }
