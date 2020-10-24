@@ -1,5 +1,7 @@
 package com.bl.InvoiceService;
 
+import java.util.Arrays;
+
 public class InvoiceGenerator {
 
     private static final double MINIMUM_COST_PER_KILOMETER = 10;
@@ -11,9 +13,14 @@ public class InvoiceGenerator {
     }
 
     public double calculateFare(double distance, int time) {
-        double fare = MINIMUM_COST_PER_KILOMETER * distance + MINIMUM_COST_PER_MINUTE * time;
-        if (fare < MINIMUM_FARE)
-            fare = MINIMUM_FARE;
-        return fare;
+        double totalFare = MINIMUM_COST_PER_KILOMETER * distance + MINIMUM_COST_PER_MINUTE * time;
+        if (totalFare < MINIMUM_FARE)
+            totalFare = MINIMUM_FARE;
+        return totalFare;
+    }
+
+    public double calculateFare(Ride[] rides) {
+        double totalFare = Arrays.stream(rides).mapToDouble(ride -> calculateFare(ride.getDistance(), ride.getTime())).sum();
+        return totalFare;
     }
 }
