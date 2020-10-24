@@ -1,5 +1,7 @@
 package com.bl.InvoiceService;
 
+import com.bl.Exception.InvoiceSummaryException;
+
 import java.util.Arrays;
 
 public class InvoiceGenerator {
@@ -24,9 +26,11 @@ public class InvoiceGenerator {
         return totalFare;
     }
 
-    public InvoiceSummary generateInvoiceSummary(Ride[] rides) {
+    public InvoiceSummary generateInvoiceSummary(Ride[] rides) throws InvoiceSummaryException {
         int totalRides = rides.length;
+        if (totalRides == 0)
+            throw new InvoiceSummaryException("No rides", InvoiceSummaryException.ExceptionType.NO_RIDES);
         double totalFare = calculateFare(rides);
-        return new InvoiceSummary(totalRides,totalFare);
+        return new InvoiceSummary(totalRides, totalFare);
     }
 }
