@@ -22,7 +22,8 @@ public class InvoiceServiceTest {
     public void givenDistanceAndTime_shouldReturnTotalFare() {
         double distance = 2.0;
         int time = 5;
-        double totalFare = invoiceGenerator.calculateFare(distance, time);
+        Ride ride = new Ride(distance, time);
+        double totalFare = invoiceGenerator.calculateFare(distance, time, ride.getType());
         Assert.assertEquals(25, totalFare, 0.0);
     }
 
@@ -30,7 +31,8 @@ public class InvoiceServiceTest {
     public void givenDistanceAndTime_shouldReturnMinimumFare() {
         double distance = 0.1;
         int time = 1;
-        double totalFare = invoiceGenerator.calculateFare(distance, time);
+        Ride ride = new Ride(distance, time);
+        double totalFare = invoiceGenerator.calculateFare(distance, time, ride.getType());
         Assert.assertEquals(5, totalFare, 0.0);
     }
 
@@ -72,5 +74,19 @@ public class InvoiceServiceTest {
             Assert.assertEquals(15, invoiceSummary.getAverageFarePerRide(), 0.0);
         } catch (InvoiceSummaryException e) {
         }
+    }
+
+    @Test
+    public void givenPremiumRide_shouldReturnInvoiceSummary() {
+        Ride[] ridePremium = {new Ride(1, 1, "premium"),
+                new Ride(2, 5, "premium")};
+        try {
+            InvoiceSummary invoiceSummary =invoiceGenerator.generateInvoiceSummary(ridePremium);
+            Assert.assertEquals(2, invoiceSummary.getTotalRides());
+            Assert.assertEquals(60, invoiceSummary.getTotalFare(), 0.0);
+            Assert.assertEquals(30, invoiceSummary.getAverageFarePerRide(), 0.0);
+        } catch (InvoiceSummaryException e) {
+        }
+
     }
 }
