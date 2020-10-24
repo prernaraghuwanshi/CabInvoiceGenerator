@@ -7,6 +7,10 @@ import org.junit.Test;
 public class InvoiceServiceTest {
 
     InvoiceGenerator invoiceGenerator = null;
+    Ride[] rides = {
+            new Ride(2.0, 5),
+            new Ride(0.1, 1)
+    };
 
     @Before
     public void initialize() {
@@ -31,11 +35,15 @@ public class InvoiceServiceTest {
 
     @Test
     public void givenMultipleRides_shouldReturnTotalFare() {
-        Ride[] rides = {
-                new Ride(2.0, 5),
-                new Ride(0.1, 1)
-        };
         double totalFare = invoiceGenerator.calculateFare(rides);
         Assert.assertEquals(30, totalFare, 0.0);
+    }
+
+    @Test
+    public void givenMultipleRides_shouldReturnInvoiceSummary() {
+        InvoiceSummary invoiceSummary = invoiceGenerator.generateInvoiceSummary(rides);
+        Assert.assertEquals(2,invoiceSummary.getTotalRides());
+        Assert.assertEquals(30,invoiceSummary.getTotalFare(),0.0);
+        Assert.assertEquals(15,invoiceSummary.getAverageFarePerRide(),0.0);
     }
 }
