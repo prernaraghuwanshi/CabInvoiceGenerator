@@ -47,9 +47,11 @@ public class InvoiceServiceTest {
     public void givenMultipleRides_shouldReturnInvoiceSummary() {
         try {
             InvoiceSummary invoiceSummary = invoiceGenerator.generateInvoiceSummary(rides);
+            InvoiceSummary expectedSummary = new InvoiceSummary(2,30);
             Assert.assertEquals(2, invoiceSummary.getTotalRides());
             Assert.assertEquals(30, invoiceSummary.getTotalFare(), 0.0);
             Assert.assertEquals(15, invoiceSummary.getAverageFarePerRide(), 0.0);
+            Assert.assertEquals(expectedSummary, invoiceSummary);
         } catch (InvoiceSummaryException e) {
         }
     }
@@ -70,9 +72,11 @@ public class InvoiceServiceTest {
         invoiceGenerator.getRideDetails().addUsersRides(userId, rides);
         try {
             InvoiceSummary invoiceSummary = invoiceGenerator.generateInvoiceSummary(userId);
+            InvoiceSummary expectedSummary = new InvoiceSummary(2,30);
             Assert.assertEquals(2, invoiceSummary.getTotalRides());
             Assert.assertEquals(30, invoiceSummary.getTotalFare(), 0.0);
             Assert.assertEquals(15, invoiceSummary.getAverageFarePerRide(), 0.0);
+            Assert.assertEquals(expectedSummary, invoiceSummary);
         } catch (InvoiceSummaryException e) {
         }
     }
@@ -83,9 +87,11 @@ public class InvoiceServiceTest {
                 new Ride(2, 5, "premium")};
         try {
             InvoiceSummary invoiceSummary =invoiceGenerator.generateInvoiceSummary(ridePremium);
+            InvoiceSummary expectedSummary = new InvoiceSummary(2,60);
             Assert.assertEquals(2, invoiceSummary.getTotalRides());
             Assert.assertEquals(60, invoiceSummary.getTotalFare(), 0.0);
             Assert.assertEquals(30, invoiceSummary.getAverageFarePerRide(), 0.0);
+            Assert.assertEquals(expectedSummary, invoiceSummary);
         } catch (InvoiceSummaryException e) {
         }
 
