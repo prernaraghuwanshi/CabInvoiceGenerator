@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.bl.InvoiceService.InvoiceServiceTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-10-24T05:01:53" hostname="DESKTOP-QTP5K3U" time="0.011">
+<testsuite name="com.bl.InvoiceService.InvoiceServiceTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2020-10-24T19:52:21" hostname="DESKTOP-QTP5K3U" time="0.012">
   <properties/>
-  <testcase name="givenMultipleRides_shouldReturnTotalFare" classname="com.bl.InvoiceService.InvoiceServiceTest" time="0.011"/>
+  <testcase name="givenDistanceAndTime_shouldReturnMinimumFare" classname="com.bl.InvoiceService.InvoiceServiceTest" time="0.002"/>
+  <testcase name="givenMultipleRides_shouldReturnInvoiceSummary" classname="com.bl.InvoiceService.InvoiceServiceTest" time="0.007"/>
+  <testcase name="givenNoRides_shouldThrowInvoiceSummaryException" classname="com.bl.InvoiceService.InvoiceServiceTest" time="0.001"/>
+  <testcase name="givenPremiumRide_shouldReturnInvoiceSummary" classname="com.bl.InvoiceService.InvoiceServiceTest" time="0.0"/>
+  <testcase name="givenDistanceAndTime_shouldReturnTotalFare" classname="com.bl.InvoiceService.InvoiceServiceTest" time="0.0"/>
+  <testcase name="givenUserId_shouldReturnInvoiceSummary" classname="com.bl.InvoiceService.InvoiceServiceTest" time="0.0"/>
+  <testcase name="givenMultipleRides_shouldReturnTotalFare" classname="com.bl.InvoiceService.InvoiceServiceTest" time="0.0"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
