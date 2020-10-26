@@ -6,17 +6,21 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 public class InvoiceServiceTest {
 
     InvoiceGenerator invoiceGenerator = null;
-    Ride[] rides = {
-            new Ride(2.0, 5),
-            new Ride(0.1, 1)
-    };
+    private ArrayList<Ride> rides = new ArrayList<>();
+    private ArrayList<Ride> ridePremium = new ArrayList<>();
 
     @Before
     public void initialize() {
         invoiceGenerator = new InvoiceGenerator();
+        rides.add(new Ride(2.0, 5));
+        rides.add(new Ride(0.1, 1));
+        ridePremium.add(new Ride(1, 1, "premium"));
+        ridePremium.add(new Ride(2, 5, "premium"));
     }
 
     @Test
@@ -47,7 +51,7 @@ public class InvoiceServiceTest {
     public void givenMultipleRides_shouldReturnInvoiceSummary() {
         try {
             InvoiceSummary invoiceSummary = invoiceGenerator.generateInvoiceSummary(rides);
-            InvoiceSummary expectedSummary = new InvoiceSummary(2,30);
+            InvoiceSummary expectedSummary = new InvoiceSummary(2, 30);
             Assert.assertEquals(2, invoiceSummary.getTotalRides());
             Assert.assertEquals(30, invoiceSummary.getTotalFare(), 0.0);
             Assert.assertEquals(15, invoiceSummary.getAverageFarePerRide(), 0.0);
@@ -58,7 +62,7 @@ public class InvoiceServiceTest {
 
     @Test
     public void givenNoRides_shouldThrowInvoiceSummaryException() {
-        Ride[] noRides = {};
+        ArrayList<Ride> noRides = new ArrayList<>();
         try {
             InvoiceSummary invoiceSummary = invoiceGenerator.generateInvoiceSummary(noRides);
         } catch (InvoiceSummaryException e) {
@@ -69,10 +73,10 @@ public class InvoiceServiceTest {
     @Test
     public void givenUserId_shouldReturnInvoiceSummary() {
         String userId = "prerna4498";
-        invoiceGenerator.getRideDetails().addUsersRides(userId, rides);
+        invoiceGenerator.addRides(userId, rides);
         try {
             InvoiceSummary invoiceSummary = invoiceGenerator.generateInvoiceSummary(userId);
-            InvoiceSummary expectedSummary = new InvoiceSummary(2,30);
+            InvoiceSummary expectedSummary = new InvoiceSummary(2, 30);
             Assert.assertEquals(2, invoiceSummary.getTotalRides());
             Assert.assertEquals(30, invoiceSummary.getTotalFare(), 0.0);
             Assert.assertEquals(15, invoiceSummary.getAverageFarePerRide(), 0.0);
@@ -83,17 +87,32 @@ public class InvoiceServiceTest {
 
     @Test
     public void givenPremiumRide_shouldReturnInvoiceSummary() {
-        Ride[] ridePremium = {new Ride(1, 1, "premium"),
-                new Ride(2, 5, "premium")};
         try {
-            InvoiceSummary invoiceSummary =invoiceGenerator.generateInvoiceSummary(ridePremium);
-            InvoiceSummary expectedSummary = new InvoiceSummary(2,60);
+            InvoiceSummary invoiceSummary = invoiceGenerator.generateInvoiceSummary(ridePremium);
+            InvoiceSummary expectedSummary = new InvoiceSummary(2, 60);
             Assert.assertEquals(2, invoiceSummary.getTotalRides());
             Assert.assertEquals(60, invoiceSummary.getTotalFare(), 0.0);
             Assert.assertEquals(30, invoiceSummary.getAverageFarePerRide(), 0.0);
             Assert.assertEquals(expectedSummary, invoiceSummary);
         } catch (InvoiceSummaryException e) {
         }
-
+    }
+    @Test
+    public void givenExistingUserId_shouldAppendNewRidesAndReturnInvoiceSummary() {
+        String userId = "prerna4498";
+        ArrayList<Ride> newRides = new ArrayList<>();
+        newRides.add(new Ride(2.0,5));
+        newRides.add(new Ride(0.1,1));
+        invoiceGenerator.addRides(userId, rides);
+        invoiceGenerator.addRides(userId, newRides);
+        try {
+            InvoiceSummary invoiceSummary = invoiceGenerator.generateInvoiceSummary(userId);
+            InvoiceSummary expectedSummary = new InvoiceSummary(4, 60);
+            Assert.assertEquals(4, invoiceSummary.getTotalRides());
+            Assert.assertEquals(60, invoiceSummary.getTotalFare(), 0.0);
+            Assert.assertEquals(15, invoiceSummary.getAverageFarePerRide(), 0.0);
+            Assert.assertEquals(expectedSummary, invoiceSummary);
+        } catch (InvoiceSummaryException e) {
+        }
     }
 }
