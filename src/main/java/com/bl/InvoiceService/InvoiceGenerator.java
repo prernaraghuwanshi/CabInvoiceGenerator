@@ -4,14 +4,18 @@ import com.bl.Exception.InvoiceSummaryException;
 import com.bl.RideDetails.Ride;
 import com.bl.RideDetails.RideRepository;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class InvoiceGenerator {
     private static double MINIMUM_COST_PER_KILOMETER;
     private static double MINIMUM_COST_PER_MINUTE;
     private static double MINIMUM_FARE;
-    private RideRepository rideRepository = new RideRepository();
+    private RideRepository rideRepository;
 
+    public InvoiceGenerator(){
+        rideRepository = new RideRepository();
+    }
     public void welcomeMessage() {
         System.out.println("Welcome to Cab Invoice Generator!");
     }
@@ -34,25 +38,25 @@ public class InvoiceGenerator {
         return Math.max(totalFare,MINIMUM_FARE);
     }
 
-    public double calculateFare(Ride[] rides) {
-        double totalFare = Arrays.stream(rides).mapToDouble(ride -> calculateFare(ride.getDistance(), ride.getTime(), ride.getType())).sum();
+    public double calculateFare(ArrayList<Ride> rides) {
+        double totalFare = rides.stream().mapToDouble(ride -> calculateFare(ride.getDistance(), ride.getTime(), ride.getType())).sum();
         return totalFare;
     }
 
-    public InvoiceSummary generateInvoiceSummary(Ride[] rides) throws InvoiceSummaryException {
-        int totalRides = rides.length;
+    public InvoiceSummary generateInvoiceSummary(ArrayList<Ride> rides) throws InvoiceSummaryException {
+        int totalRides = rides.size();
         if (totalRides == 0 || rides == null)
             throw new InvoiceSummaryException("No rides", InvoiceSummaryException.ExceptionType.NO_RIDES);
         double totalFare = calculateFare(rides);
         return new InvoiceSummary(totalRides, totalFare);
     }
 
-    public RideRepository getRideDetails() {
-        return rideRepository;
+    public void addRides(String userId, ArrayList<Ride> rides) {
+        rideRepository.addUsersRides(userId,rides);
     }
 
     public InvoiceSummary generateInvoiceSummary(String userId) throws InvoiceSummaryException {
-        Ride[] rides = rideRepository.getRideMap().get(userId);
+        ArrayList<Ride> rides = rideRepository.getRideMap().get(userId);
         return generateInvoiceSummary(rides);
     }
 }
